@@ -1,17 +1,18 @@
-//
-//  FireBaseApp.swift
-//  FireBase
-//
-//  Created by Nurbol on 24.02.2025.
-//
-
 import SwiftUI
+import FirebaseCore
 
 @main
-struct FireBaseApp: App {
+struct FirebaseAppExample: App {
+    
+    init() {
+        FirebaseApp.configure()
+    }
+    
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            LoginViewControllerRepresentable()
         }
     }
 }
+
+
