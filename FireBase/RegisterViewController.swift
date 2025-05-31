@@ -3,10 +3,10 @@ import FirebaseAuth
 
 class RegisterViewController: UIViewController {
     
-    
     let emailTextField = UITextField()
     let passwordTextField = UITextField()
     let registerButton = UIButton(type: .system)
+    let loginButton = UIButton(type: .system)  // Жаңа батырма
     let titleLabel = UILabel()
 
     override func viewDidLoad() {
@@ -15,14 +15,11 @@ class RegisterViewController: UIViewController {
         setupUI()
     }
     
-   
     func setupUI() {
-        
         titleLabel.text = "Create Account"
         titleLabel.font = UIFont.boldSystemFont(ofSize: 28)
         titleLabel.textAlignment = .center
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
-        
         
         emailTextField.placeholder = "Email"
         emailTextField.borderStyle = .roundedRect
@@ -34,7 +31,6 @@ class RegisterViewController: UIViewController {
         emailTextField.layer.shadowOffset = CGSize(width: 0, height: 2)
         emailTextField.translatesAutoresizingMaskIntoConstraints = false
         
-        
         passwordTextField.placeholder = "Password"
         passwordTextField.borderStyle = .roundedRect
         passwordTextField.isSecureTextEntry = true
@@ -45,7 +41,6 @@ class RegisterViewController: UIViewController {
         passwordTextField.layer.shadowOffset = CGSize(width: 0, height: 2)
         passwordTextField.translatesAutoresizingMaskIntoConstraints = false
         
-      
         registerButton.setTitle("Register", for: .normal)
         registerButton.backgroundColor = UIColor.systemGreen
         registerButton.setTitleColor(.white, for: .normal)
@@ -56,22 +51,33 @@ class RegisterViewController: UIViewController {
         registerButton.layer.shadowOffset = CGSize(width: 0, height: 3)
         registerButton.addTarget(self, action: #selector(handleRegister), for: .touchUpInside)
         registerButton.translatesAutoresizingMaskIntoConstraints = false
+
+        // Login батырмасының конфигурациясы
+        loginButton.setTitle("Already have an account? Login", for: .normal)
+        loginButton.setTitleColor(.systemBlue, for: .normal)
+        loginButton.titleLabel?.font = UIFont.systemFont(ofSize: 16)
+        loginButton.addTarget(self, action: #selector(goToLogin), for: .touchUpInside)
+        loginButton.translatesAutoresizingMaskIntoConstraints = false
         
-       
+        // StackView-ге Login батырмасын қоспай, оны бөлек орналастырамыз
         let stackView = UIStackView(arrangedSubviews: [titleLabel, emailTextField, passwordTextField, registerButton])
         stackView.axis = .vertical
         stackView.spacing = 20
         stackView.translatesAutoresizingMaskIntoConstraints = false
         
         view.addSubview(stackView)
+        view.addSubview(loginButton)
+        
         NSLayoutConstraint.activate([
             stackView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             stackView.centerYAnchor.constraint(equalTo: view.centerYAnchor),
-            stackView.widthAnchor.constraint(equalToConstant: 300)
+            stackView.widthAnchor.constraint(equalToConstant: 300),
+
+            loginButton.topAnchor.constraint(equalTo: stackView.bottomAnchor, constant: 20),
+            loginButton.centerXAnchor.constraint(equalTo: view.centerXAnchor)
         ])
     }
     
-  
     @objc func handleRegister() {
         guard let email = emailTextField.text, let password = passwordTextField.text else { return }
         
@@ -86,5 +92,11 @@ class RegisterViewController: UIViewController {
             loginVC.modalPresentationStyle = .fullScreen
             self.present(loginVC, animated: true, completion: nil)
         }
+    }
+    
+    @objc func goToLogin() {
+        let loginVC = LoginViewController()
+        loginVC.modalPresentationStyle = .fullScreen
+        present(loginVC, animated: true, completion: nil)
     }
 }
